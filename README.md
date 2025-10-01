@@ -33,3 +33,39 @@ gantt
     최종 테스트 및 검증       :a20, 2025-10-13, 3d
 
 ```
+
+## 와이어프레임(Wireframe)
+
+<img width="1919" height="1079" alt="Image" src="https://github.com/user-attachments/assets/ac730e7c-7f14-42f3-92fa-605ab75b9ce2" />
+
+<img width="1919" height="1079" alt="Image" src="https://github.com/user-attachments/assets/5a4e992c-b10a-48bb-950f-1cbb7351a502" />
+
+# 첫번째, 두번째 화면은 회원가입 & 로그인 페이지입니다.
+
+<img width="1919" height="1079" alt="Image" src="https://github.com/user-attachments/assets/fa17ec5d-4956-48a7-a306-ff983e750ccd" />
+
+# 세번째 페이지는 블로그의 메인화면입니다.
+
+<img width="1919" height="1079" alt="Image" src="https://github.com/user-attachments/assets/4898ad49-80e6-43c3-83d8-a7791059baab" />
+
+# 네번째 페이지는 AI를 이용한 새 글 작성을 할수있는 페이지입니다. 
+
+<img width="1919" height="1079" alt="Image" src="https://github.com/user-attachments/assets/a5436883-5669-48df-bdbe-f7b161d2fa6e" />
+
+# 다섯번째 페이지는 다른 사용자의 게시글 상세 정보 및 게시글내에 댓글 작성하는 화면입니다. (게시글 상세 페이지)
+
+<img width="1919" height="1079" alt="Image" src="https://github.com/user-attachments/assets/86ac6f22-bda2-485e-8c0c-3cba82435d0e" />
+
+# 여섯번째 페이지는 본인이 작성한 게시글 수정 및 삭제할수있는 화면입니다. (게시글 수정/삭제 페이지)
+
+<img width="1919" height="1079" alt="Image" src="https://github.com/user-attachments/assets/21a4d3f6-01cb-4bd0-a897-d43b4f2965d2" />
+
+# 일곱번째 페이지는 게시글 검색 화면입니다. (검색 결과 페이지)
+
+<img width="1919" height="1079" alt="Image" src="https://github.com/user-attachments/assets/a030b69c-33fb-4da3-b924-c91a36a81813" />
+
+# 여덟번째는 본인의 프로필 수정하거나 탈퇴할수 있는 페이지입니다. (사용자 프로필 페이지)
+
+<img width="1919" height="1079" alt="Image" src="https://github.com/user-attachments/assets/21903d9d-ebbe-4f00-8e92-a7c407d1f0e8" />
+
+# 아홉번째도 정보 변경하는 페이지입니다. (프로필 수정 페이지)
