@@ -1,3 +1,10 @@
+<img width="683" height="555" alt="Image" src="https://github.com/user-attachments/assets/e3a1bf6b-d17a-4d09-871c-5678f98dc340" />
+
+위에 사진은 표로 정리해드린건데 AI도움을 받았습니다.
+
+
+
+
 HTTP 메서드	URL	설명
 POST	/api/auth/signup	새로운 사용자를 생성하고 회원가입을 처리합니다.
 
