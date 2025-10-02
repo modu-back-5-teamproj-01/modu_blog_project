@@ -95,3 +95,7 @@ gantt
 | **AI 기능**      | POST   | `/ai/autocomplete`                              | 글 자동완성                 | ❌      |
 |                     | POST   | `/ai/summarize`                                 | 게시글 요약                 | ❌      |
 |                     | POST   | `/ai/tags`                                      | 태그 자동 추천               | ❌      |
+
+
+## 📝 ERD
+![ERD](./static/images/blog_project_diagram.png)
