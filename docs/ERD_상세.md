@@ -1,6 +1,6 @@
 # ERD 상세
 
-![ERD](../../static/images/blog_project_diagram.png)
+![ERD](../static/images/blog_project_diagram.png)
 ## 1️⃣ users — 사용자 계정 정보
 | 필드                      | 의미                  | 사용 목적                        |
 | ----------------------- | ------------------- | ---------------------------- |
