@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
-import database
-import schemas
+import back.app.core.database as database
+import back.app.schemas.schemas as schemas
 import models
 from passlib.context import CryptContext
 
