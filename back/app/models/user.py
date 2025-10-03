@@ -1,9 +1,17 @@
-from sqlalchemy import Column, Integer, String
-from back.app.core.database import Base
+import datetime
+from sqlalchemy import Column, Integer, String, DateTime
+from sqlalchemy.orm import relationship
+from .base import Base
 
 class User(Base):
     __tablename__ = "users"
-
     id = Column(Integer, primary_key=True, index=True)
-    username = Column(String, unique=True, index=True, nullable=False)
-    password = Column(String, nullable=False)
+    username = Column(String, unique=True, index=True)
+    email = Column(String, unique=True, index=True)
+    password_hash = Column(String)
+    created_at = Column(DateTime, default=datetime.datetime.now)
+
+    posts = relationship("Post", back_populates="author")
+    comments = relationship("Comment", back_populates="author")
+    sessions = relationship("Session", back_populates="user")
+    uploads = relationship("Upload", back_populates="uploader")
