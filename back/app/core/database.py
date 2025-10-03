@@ -16,23 +16,5 @@ Base = declarative_base()
 
 
 
-# User 클래스 정의
-class User(Base):
-    __tablename__ = "users"
-    id = Column(Integer, primary_key=True, index=True)
-    username = Column(String, unique=True, index=True)
-    email = Column(String, unique=True, index=True)
-    hashed_password = Column(String)
-    created_at = Column(DateTime, default=datetime.datetime.now)
-
-# Post 클래스 정의
-class Post(Base):
-    __tablename__ = "posts"
-    id = Column(Integer, primary_key=True, index=True)
-    title = Column(String, index=True)
-    content = Column(String)
-    user_id = Column(Integer, ForeignKey("users.id")) # 사용자 연결
-    created_at = Column(DateTime, default=datetime.datetime.now)
-
 # 테이블 생성 (engine과 Base가 정의된 후 실행)
 Base.metadata.create_all(bind=engine)
