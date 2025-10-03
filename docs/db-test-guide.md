@@ -1,6 +1,6 @@
 # 데이터베이스 설정 및 확인 가이드
 
-<img width="781" height="312" alt="Image" src="https://github.com/user-attachments/assets/07fa42f3-c88b-4146-9d2f-f109b5b81848" />
+![ERD](../static/images/model.png)
 
 
 ## 1. 필수 모듈 설치
@@ -38,14 +38,12 @@ sqlite3 blog.db
 ```
 
 
-<img width="775" height="289" alt="Image" src="https://github.com/user-attachments/assets/cb6a2a48-f5a8-44b2-af92-e0b30ef5b5f4" />
+![ERD](../static/images/SQLite.png)
 
 명령어 실행을 하고, 위와 같은 에러가 났을때는 
 
-<img width="684" height="756" alt="Image" src="https://github.com/user-attachments/assets/f372e42c-78ef-4e5d-a611-3fbf5dc3f118" />
 
 
-<img width="775" height="115" alt="Image" src="https://github.com/user-attachments/assets/21061597-749c-465a-b142-0dfd363de629" />
-
+![ERD](../static/images/sqlalchemy.png)
 
 명령어가 정상적으로 작동이 된다면 위와 같은 결과가 나옵니다. (단, 제가 일단 다 수정해놓은 상태라서 명령어만 실행시키시면 될것같아요 !!)
