@@ -28,14 +28,6 @@ python database.py
 
 이 도구를 사용하면 생성된 `blog.db` 파일을 쉽게 열어서 테이블 목록(`users`, `posts`, `comments` 등)과 각 테이블의 스키마(컬럼명, 데이터 타입)가 ERD와 일치하는지 시각적으로 확인할 수 있습니다.
 
-### SQLite CLI 사용
-
-터미널에서 다음 명령어를 입력하여 데이터베이스 파일에 접속하고 `.schema` 명령어로 테이블 스키마를 확인할 수 있습니다.
-
-```bash
-sqlite3 blog.db
-.schema
-```
 
 
 ![ERD](../static/images/SQLite.png)
