@@ -8,10 +8,10 @@ class User(Base):
     id = Column(Integer, primary_key=True, index=True)
     username = Column(String, nullable=False, index=True)
     password_hash = Column(String, nullable=False)
-    email = Column(String)
+    email = Column(String, unique=True)
     bio = Column(Text)
-    created_at = Column(DateTime)
-    updated_at = Column(DateTime)
+    created_at = Column(DateTime, default=datetime.datetime.now)
+    updated_at = Column(DateTime, default=datetime.datetime.now, onupdate=datetime.datetime.now)
 
     posts = relationship("Post", back_populates="author")
     comments = relationship("Comment", back_populates="author")
