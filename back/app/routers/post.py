@@ -1,71 +1,23 @@
+# back/app/routers/post.py 파일 전체 내용 (dependencies.py에서 임포트)
+
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
-import back.app.core.database as database
-import back.app.schemas.schemas as schemas
-import models
-# from .. import database, models
+from ..core.database import get_db
+from ..schemas import post as post_schema
+from ..models import post as post_model 
+from ..models import user as user_model 
 
-router = APIRouter(prefix="/posts", tags=["Posts"])
+# 🚨 dependencies.py에서 get_current_user를 임포트합니다.
+from ..dependencies import get_current_user 
 
+router = APIRouter()
 
-def get_db():
-    db = database.SessionLocal()
-    try:
-        yield db
-    finally:
-        db.close()
-
-
-@router.post("/", response_model=schemas.Post, status_code=status.HTTP_201_CREATED)
-def create_post(post: schemas.Post, db: Session = Depends(get_db)):
-    db_post = models.Post(**post.dict())
-    db.add(db_post)
-    db.commit()
-    db.refresh(db_post)
-    # TODO: 여기에서 OpenAI API를 호출하여 요약 및 태그 생성 로직 추가 !
-    return db_post
-
-
-# READ (게시글 목록 조회)
-@router.get("/", response_model=list[schemas.Post])
-def read_posts(db: Session = Depends(get_db)):
-    posts = db.query(models.Post).all()
-    return posts
-
-
-# READ (게시글 상세 조회)
-@router.get("/{post_id}", response_model=schemas.Post)
-def read_post(post_id: int, db: Session = Depends(get_db)):
-    post = db.query(models.Post).filter(models.Post.id == post_id).first()
-    if post is None:
-        raise HTTPException(status_code=404, detail="Post not found")
-    return post
-
-
-# UPDATE (게시글 수정)
-@router.put("/{post_id}", response_model=schemas.Post)
-def update_post(
-    post_id: int, post_data: schemas.PostUptate, db: Session = Depends(get_db)
+# 게시물 생성
+@router.post("/", response_model=post_schema.Post, status_code=status.HTTP_201_CREATED)
+async def create_new_post(
+    post: post_schema.PostCreate,
+    db: Session = Depends(get_db),
+    current_user: user_model.UserModel = Depends(get_current_user) 
 ):
-    db_post = db.query(models.Post).filter(models.Post.id == post_id).first()
-    if db_post is None:
-        raise HTTPException(status_code=404, detail="Post not found")
-
-    for key, value in post_data.dict(exclude_unset=True).items():
-        setattr(db_post, key, value)
-
-    db.commit()
-    db.refresh(db_post)
-    return db_post
-
-
-# DELETE (게시글 삭제)
-@router.delete("/{post_id}", status_code=status.HTTP_204_NO_CONTENT)
-def delete_post(post_id: int, db: Session = Depends(get_db)):
-    db_post = db.query(models.Post).filter(models.Post.id == post_id).first()
-    if db_post is None:
-        raise HTTPException(status_code=404, detail="Post not found")
-
-    db.delete(db.post)
-    db.commit()
-    return {"message": "Post deleted successfully"}
+    # 이제 순환 참조 없이 사용자 모델을 사용할 수 있습니다.
+    return post

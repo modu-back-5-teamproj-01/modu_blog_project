@@ -3,7 +3,7 @@ from sqlalchemy import Column, Integer, String, DateTime, ForeignKey, Text
 from sqlalchemy.orm import relationship
 from .base import Base
 
-class Post(Base):
+class PostModel(Base):
     __tablename__ = "posts"
     id = Column(Integer, primary_key=True, index=True)
     author_id = Column(Integer, ForeignKey("users.id"), nullable=False)
@@ -16,6 +16,6 @@ class Post(Base):
     published_at = Column(DateTime)
 
     author = relationship("User", back_populates="posts")
-    comments = relationship("Comment", back_populates="post")
+    comments = relationship("Comment", back_populates="post", cascade="all, delete-orphan")
     tags = relationship("PostTag", back_populates="post")
     uploads = relationship("Upload", back_populates="post")
