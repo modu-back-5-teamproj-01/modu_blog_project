@@ -1,25 +1,40 @@
+import sys
+from pathlib import Path
+import uvicorn
+import os
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
+from dotenv import load_dotenv
 
-# 🚨 1. 라우터 임포트 수정: ai 모듈 추가
-import back.app.routers.auth as auth
-import back.app.routers.user as user
-import back.app.routers.post as post
-import back.app.routers.ai as ai  # <--- 이 줄 추가
+from routers import auth
+from routers import ai
+from routers import post 
 
-# 코어 파일 임포트
-from back.app.core.database import Base, engine 
+load_dotenv()
 
-# 데이터베이스 테이블 생성
-Base.metadata.create_all(bind=engine)
+SECRET_KEY = os.getenv("SECRET_KEY")
+if not SECRET_KEY:
+    raise ValueError("SECRET_KEY가 .env 파일에 설정되어 있지 않습니다.")
+
+DB_FILE = "db.jsonl"
+USERS_FILE = "users.jsonl"
+POSTS_FILE = "posts.jsonl"
 
 app = FastAPI()
 
-# 🚨 2. 라우터 등록 수정: ai 라우터 등록 추가
-app.include_router(auth.router, prefix="/auth", tags=["auth"])
-app.include_router(user.router, prefix="/users", tags=["users"])
-app.include_router(post.router, prefix="/posts", tags=["posts"])
-app.include_router(ai.router, prefix="/ai", tags=["ai"]) # <--- 이 줄 추가
+# 라우터 등록
+app.include_router(auth.router)
+app.include_router(ai.router)
+app.include_router(post.router)
 
 @app.get("/")
 def read_root():
-    return {"message": "Welcome to Modu Blog API"}
+    return {"Hello": "World"}
+
+if __name__ == "__main__":
+    if not os.path.exists(USERS_FILE):
+        open(USERS_FILE, "w").close()
+    if not os.path.exists(POSTS_FILE):
+        open(POSTS_FILE, "w").close()
+
+    uvicorn.run(app, host="0.0.0.0", port=8000)

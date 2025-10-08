@@ -1,25 +1,33 @@
-# back/app/schemas/user.py 파일 전체 내용
-
 from pydantic import BaseModel, EmailStr
-from datetime import datetime
-from typing import Optional # bio를 위해 Optional 타입을 추가합니다.
+from typing import Optional
 
-# 요청 바디용 스키마 (회원가입 시 사용)
-class UserCreate(BaseModel):
+class UserBase(BaseModel):
+    """기본 사용자 정보 (이메일, 사용자명)"""
+    email: EmailStr
     username: str
+
+class UserCreate(UserBase):
+    """회원가입 요청 데이터 (비밀번호 포함)"""
+    password: str
+
+class LoginRequest(BaseModel):
+    """로그인 요청 데이터"""
     email: EmailStr
     password: str
-    bio: Optional[str] = None # Optional 사용
 
-# 응답용 스키마 (다른 파일에서 UserOut으로 임포트하도록 통일)
-class UserOut(BaseModel): 
-    id: int
-    username: str
-    email: EmailStr
-    bio: Optional[str] = None
-    created_at: datetime
-    updated_at: datetime
+class TokenResponse(BaseModel):
+    """로그인 성공 응답 데이터 (JWT 토큰 반환)"""
+    token: str
+    message: str = "로그인 성공"
+
+class UserInDB(UserBase):
+    """DB 저장 시 사용할 모델 (비밀번호는 해시된 문자열)"""
+    hashed_password: str
+
+class UserOut(UserBase):
+    """외부(게시물 등)에 사용자 정보를 노출할 때 사용하는 안전한 모델 (비밀번호 제외)"""
+    # email과 username은 UserBase에서 상속받음
     
-    # Pydantic 설정
     class Config:
-        orm_mode = True
+        # Pydantic 2.0+ 버전에서 ORM 모드(딕셔너리 대신 객체에서 데이터 로딩) 지원을 위해 사용
+        from_attributes = True

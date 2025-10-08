@@ -1,83 +1,97 @@
-from fastapi import APIRouter, Depends, HTTPException, status
-from sqlalchemy.orm import Session
-from fastapi.security import OAuth2PasswordRequestForm
+import sys
+from pathlib import Path
+import os
+import json
+import bcrypt
+import jwt
+from fastapi import APIRouter, status, HTTPException
+from fastapi.responses import JSONResponse
+from dotenv import load_dotenv
+from datetime import datetime
 
-from ..schemas import user as user_schema
-from ..models import user as user_model
-from ..core.database import get_db
+# 💡 절대 경로 임포트: main.py의 sys.path 주입에 의존합니다.
+from schemas.user import UserCreate, LoginRequest, TokenResponse
+from core.security import get_current_user_email
+# 환경 변수 및 파일 경로 설정
+load_dotenv()
+SECRET_KEY = os.getenv("SECRET_KEY")
+if not SECRET_KEY:
+    raise ValueError("SECRET_KEY가 .env 파일에 설정되어 있지 않습니다.")
 
-# 🚨 반드시 필요합니다: 비밀번호 해싱 및 JWT 관련 핵심 로직
-from ..core.security import hash_password, verify_password, create_access_token 
+USERS_FILE = "users.json"
+router = APIRouter(prefix="/api/auth", tags=["Auth"])
 
-router = APIRouter()
+# --- 유틸리티 함수: JWT 및 파일 처리 ---
 
-# --- 1. 회원가입 (Signup) ---
-@router.post("/signup", response_model=user_schema.UserOut, status_code=status.HTTP_201_CREATED, tags=["Auth"])
-def create_user(user: user_schema.UserCreate, db: Session = Depends(get_db)):
-    """
-    새로운 사용자를 등록하고 데이터베이스에 저장합니다.
-    """
+def find_user_by_email(email: str):
+    """이메일을 통해 사용자 정보를 파일에서 검색"""
+    if not os.path.exists(USERS_FILE):
+        return None
+    with open(USERS_FILE, "r", encoding="utf-8") as f:
+        try:
+            users = json.load(f)
+            return next((u for u in users if u["email"] == email), None)
+        except json.JSONDecodeError:
+            return None
+
+def save_user_to_db(user_data: dict):
+    """새 사용자 정보를 파일에 저장"""
+    users = []
+    if os.path.exists(USERS_FILE) and os.path.getsize(USERS_FILE) > 0:
+        with open(USERS_FILE, "r", encoding="utf-8") as f:
+            try:
+                users = json.load(f)
+            except json.JSONDecodeError:
+                pass
+                
+    users.append(user_data)
+    with open(USERS_FILE, "w", encoding="utf-8") as f:
+        json.dump(users, f, indent=4, ensure_ascii=False)
+
+def create_access_token(data: dict):
+    """JWT 토큰 생성"""
+    to_encode = data.copy()
+    # 토큰 만료 시간 설정 (예: 1시간)
+    expire = datetime.utcnow() + timedelta(minutes=60) 
+    to_encode.update({"exp": expire})
+    encoded_jwt = jwt.encode(to_encode, SECRET_KEY, algorithm="HS256")
+    return encoded_jwt
+
+from datetime import timedelta # create_access_token을 위해 추가
+
+# --- 라우터 엔드포인트 구현 ---
+
+@router.post("/register", status_code=status.HTTP_201_CREATED)
+async def register(user_data: UserCreate):
+    """새 사용자 등록 (회원가입)"""
+    if find_user_by_email(user_data.email):
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="이미 등록된 이메일입니다.")
+
+    # 비밀번호 해시
+    hashed_password = bcrypt.hashpw(user_data.password.encode('utf-8'), bcrypt.gensalt())
     
-    # 사용자 이름 또는 이메일 중복 검사
-    if db.query(user_model.UserModel).filter(
-        (user_model.UserModel.username == user.username) | 
-        (user_model.UserModel.email == user.email)
-    ).first():
-        raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST, 
-            detail="사용자 이름 또는 이메일이 이미 등록되어 있습니다."
-        )
-
-    # 비밀번호 해싱
-    hashed_password = hash_password(user.password)
-
-    # DB 모델 생성
-    db_user = user_model.UserModel(
-        username=user.username,
-        email=user.email,
-        password_hash=hashed_password,
-        bio=user.bio 
-    )
+    new_user = {
+        "email": user_data.email,
+        "username": user_data.username,
+        "hashed_password": hashed_password.decode('utf-8')
+    }
     
-    db.add(db_user)
-    db.commit()
-    db.refresh(db_user)
-    return db_user
+    save_user_to_db(new_user)
+    return JSONResponse(content={"message": "회원가입이 완료되었습니다."}, status_code=status.HTTP_201_CREATED)
 
-# --- 2. 로그인 (Login) ---
-# 로그인은 토큰을 반환하므로 별도의 응답 스키마가 필요합니다.
-class Token(user_schema.BaseModel):
-    access_token: str
-    token_type: str = "bearer"
-    user: user_schema.UserOut # 토큰과 함께 사용자 정보 반환
-
-@router.post("/login", response_model=Token, tags=["Auth"])
-def login_for_access_token(
-    form_data: OAuth2PasswordRequestForm = Depends(), # username과 password를 form-data로 받습니다.
-    db: Session = Depends(get_db)
-):
-    """
-    사용자 자격 증명을 확인하고 액세스 토큰을 발급합니다.
-    """
+@router.post("/login", response_model=TokenResponse)
+async def login(credentials: LoginRequest):
+    """사용자 로그인 및 JWT 토큰 발행"""
+    user = find_user_by_email(credentials.email)
     
-    # 사용자 이메일(폼 데이터에서는 username 필드를 사용)로 DB에서 사용자 찾기
-    user = db.query(user_model.UserModel).filter(
-        user_model.UserModel.email == form_data.username # OAuth2는 username 필드를 사용합니다.
-    ).first()
+    if not user:
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="이메일 또는 비밀번호가 올바르지 않습니다.")
 
-    # 사용자 존재 여부 및 비밀번호 확인
-    if not user or not verify_password(form_data.password, user.password_hash):
-        raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="이메일 또는 비밀번호가 올바르지 않습니다.",
-            headers={"WWW-Authenticate": "Bearer"},
-        )
+    # 비밀번호 검증
+    if not bcrypt.checkpw(credentials.password.encode('utf-8'), user["hashed_password"].encode('utf-8')):
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="이메일 또는 비밀번호가 올바르지 않습니다.")
 
     # JWT 토큰 생성
-    access_token = create_access_token(data={"sub": user.email})
+    access_token = create_access_token(data={"sub": user["email"]})
     
-    # 토큰과 사용자 정보를 함께 반환
-    return Token(
-        access_token=access_token,
-        user=user # UserOut 스키마가 ORM 모드로 사용자 모델을 자동 변환
-    )
+    return TokenResponse(token=access_token)

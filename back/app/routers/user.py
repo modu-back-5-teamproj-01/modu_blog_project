@@ -21,3 +21,7 @@ def get_all_users(db: Session = Depends(get_db)):
 @router.get("/me")
 def read_users_me():
     return {"username": "current_user_placeholder"}
+
+@router.get("/me")
+def read_current_user():
+    return {"message": "User 라우터 로드 성공: (인증 기능 무력화)"}

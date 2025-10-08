@@ -1,29 +1,25 @@
-# back/app/schemas/post.py 파일 전체 내용
-
 from pydantic import BaseModel
 from datetime import datetime
 from typing import Optional
 
-# UserOut 스키마 임포트 (schemas 폴더 내의 user.py에서 가져옴)
-# 이 임포트가 작동하려면 schemas/__init__.py가 제대로 되어 있어야 합니다.
-from .user import UserOut 
-
-# 게시물 생성/수정 요청 바디용 스키마
-class PostCreate(BaseModel):
+class PostBase(BaseModel):
     title: str
     content: str
+    category: Optional[str] = None
 
-# 🚨 이 클래스 이름이 routers/post.py에서 'post_schema.Post'로 참조하는 것입니다.
-class Post(BaseModel): 
+class PostCreate(PostBase):
+    pass
+
+class PostUpdate(BaseModel):  # 이 클래스가 없어서 에러 발생
+    title: Optional[str] = None
+    content: Optional[str] = None
+    category: Optional[str] = None
+
+class PostResponse(PostBase):
     id: int
-    title: str
-    content: str
+    author_id: int
     created_at: datetime
     updated_at: datetime
     
-    # owner를 UserOut 스키마로 정의
-    owner: UserOut 
-    
-    # Pydantic 설정 (SQLAlchemy ORM 호환성)
     class Config:
-        orm_mode = True
+        from_attributes = True  # orm_mode 대신 from_attributes 사용 (Pydantic V2)
