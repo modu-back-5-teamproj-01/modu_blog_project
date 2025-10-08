@@ -47,6 +47,36 @@ router = APIRouter(
     dependencies=[Depends(security)] 
 )
 
+# modu_blog_project/back/app/routers/ai.py (내용 요약 함수)
+
+# 💡 이 함수가 파일에 있는지, 그리고 주석 처리되어 있지 않은지 확인하세요.
+
+@router.post("/summary", response_model=AIResponse)
+async def summarize_content(
+    request: AIRequest,
+    # current_user_email: str = Depends(get_current_user_email) # 인증 필요 시
+):
+    try:
+        text_to_summarize = request.prompt # 예시: prompt 필드를 요약 텍스트로 사용
+        
+        prompt = f"다음 내용을 3줄로 간결하게 요약해 주세요: \n\n{text_to_summarize}"
+        
+        response = client.chat.completions.create(
+            model="gpt-4o-mini",
+            messages=[
+                {"role": "system", "content": "당신은 핵심만 추출하는 요약 전문가입니다."},
+                {"role": "user", "content": prompt}
+            ]
+        )
+        
+        summary_text = response.choices[0].message.content
+        return {"result": summary_text} # AIResponse 스키마의 필드 이름에 맞게 조정
+    
+    except Exception as e:
+        # ... (에러 처리 로직)
+        pass
+
+
 
 @router.post("/draft", response_model=AIResponse)
 async def generate_draft(

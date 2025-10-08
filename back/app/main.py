@@ -18,17 +18,19 @@ security = HTTPBearer()
 # 3. FastAPI 앱 정의 및 보안 스키마 직접 정의 (Value 입력란 생성)
 app = FastAPI(
     title="AI Blog API",
+    # 💡 이 부분을 다시 확인하고 수정합니다.
     openapi_extra={
         "components": {
             "securitySchemes": {
-                "ApiKeyAuth": { 
-                    "type": "apiKey",
-                    "in": "header",
-                    "name": "Authorization", 
+                "BearerAuth": {  # 💡 스키마 이름을 'BearerAuth'로 명확히 지정
+                    "type": "http",
+                    "scheme": "bearer",  # 💡 scheme을 'bearer'로 지정 (HTTPBearer의 표준)
+                    "bearerFormat": "JWT",
                 }
             }
         },
-        "security": [{"ApiKeyAuth": []}], 
+        # AI, Post 등 보호된 엔드포인트에 이 스키마를 사용하도록 지정
+        "security": [{"BearerAuth": []}],
     }
 )
 
