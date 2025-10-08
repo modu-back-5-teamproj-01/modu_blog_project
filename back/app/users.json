@@ -13,5 +13,10 @@
         "email": "ganghwai@gmail.com",
         "username": "ganghwai",
         "hashed_password": "$2b$12$LMLsPuYxLhXlTKhy1S2TaeFJKJAgYSEDzaQ1wp2Zrv3WcLk7uX4dm"
+    },
+    {
+        "email": "dkdldb9305@naver.com",
+        "username": "ganghwai",
+        "hashed_password": "$2b$12$Gs97iMchjPN8NgJ4yzzacOuEkOvllESEPCaT89aDZKd4cTwZBWLyW"
     }
 ]

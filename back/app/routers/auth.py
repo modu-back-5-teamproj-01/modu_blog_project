@@ -8,6 +8,7 @@ from fastapi import APIRouter, status, HTTPException
 from fastapi.responses import JSONResponse
 from dotenv import load_dotenv
 from datetime import datetime
+from fastapi import Form
 
 # 💡 절대 경로 임포트: main.py의 sys.path 주입에 의존합니다.
 from schemas.user import UserCreate, LoginRequest, TokenResponse

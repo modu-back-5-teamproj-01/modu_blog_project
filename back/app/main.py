@@ -1,40 +1,43 @@
 import sys
 from pathlib import Path
-import uvicorn
-import os
 from fastapi import FastAPI
-from fastapi.middleware.cors import CORSMiddleware
-from dotenv import load_dotenv
+from fastapi.security import HTTPBearer
 
-from routers import auth
-from routers import ai
-from routers import post 
+# 프로젝트 루트를 Python 경로에 추가 (import 전에 실행)
+PROJECT_ROOT = Path(__file__).resolve().parent.parent.parent  # back의 상위 디렉토리
+if str(PROJECT_ROOT) not in sys.path:
+    sys.path.insert(0, str(PROJECT_ROOT))
 
-load_dotenv()
+# 이제 절대 경로 임포트
+from back.app.routers import auth
+from back.app.routers import ai
+from back.app.routers import post
 
-SECRET_KEY = os.getenv("SECRET_KEY")
-if not SECRET_KEY:
-    raise ValueError("SECRET_KEY가 .env 파일에 설정되어 있지 않습니다.")
+security = HTTPBearer()
 
-DB_FILE = "db.jsonl"
-USERS_FILE = "users.jsonl"
-POSTS_FILE = "posts.jsonl"
+# 3. FastAPI 앱 정의 및 보안 스키마 직접 정의 (Value 입력란 생성)
+app = FastAPI(
+    title="AI Blog API",
+    openapi_extra={
+        "components": {
+            "securitySchemes": {
+                "ApiKeyAuth": { 
+                    "type": "apiKey",
+                    "in": "header",
+                    "name": "Authorization", 
+                }
+            }
+        },
+        "security": [{"ApiKeyAuth": []}], 
+    }
+)
 
-app = FastAPI()
-
-# 라우터 등록
+# 4. 라우터 등록
 app.include_router(auth.router)
 app.include_router(ai.router)
 app.include_router(post.router)
 
+# 5. 기본 루트 엔드포인트
 @app.get("/")
 def read_root():
-    return {"Hello": "World"}
-
-if __name__ == "__main__":
-    if not os.path.exists(USERS_FILE):
-        open(USERS_FILE, "w").close()
-    if not os.path.exists(POSTS_FILE):
-        open(POSTS_FILE, "w").close()
-
-    uvicorn.run(app, host="0.0.0.0", port=8000)
+    return {"message": "Welcome to the AI Blog API!"}

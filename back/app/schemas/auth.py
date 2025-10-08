@@ -2,6 +2,10 @@ from pydantic import BaseModel, EmailStr
 from datetime import datetime
 from typing import Optional
 
+from back.app.core import get_db
+from back.app.models import User
+from back.app.schemas import UserCreate
+
 class UserBase(BaseModel):
     username: str
     email: EmailStr
