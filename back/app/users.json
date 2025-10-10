@@ -16,7 +16,22 @@
     },
     {
         "email": "dkdldb9305@naver.com",
-        "username": "ganghwai",
+        "username": "최종_테스터_성공",
         "hashed_password": "$2b$12$Gs97iMchjPN8NgJ4yzzacOuEkOvllESEPCaT89aDZKd4cTwZBWLyW"
+    },
+    {
+        "email": "TEST@naver.com",
+        "username": "tests",
+        "hashed_password": "$2b$12$yC56H4ZR9FeiKRvRLei3/ef8bDDswb3Uq2EscE2jh/SlZygoNZWI."
+    },
+    {
+        "email": "wlgus0923@gmail.com",
+        "username": "wlgus",
+        "hashed_password": "$2b$12$Y6Dj3Mob23FqtnrB8KrFEuiUX9xvXV3D0AGo/5UWgyT4mNx4nPDeC"
+    },
+    {
+        "email": "rudghks1995@naver.com",
+        "username": "rudghks",
+        "hashed_password": "$2b$12$TFpJMnsMomPr112V8XgGleezzLvZS7aRK39YvEkIr3liRrHkj81uK"
     }
 ]
