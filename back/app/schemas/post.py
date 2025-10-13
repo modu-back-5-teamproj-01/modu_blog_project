@@ -1,25 +1,35 @@
 from pydantic import BaseModel
 from datetime import datetime
-from typing import Optional
+from typing import List, Optional
+from .user import UserRead
+from .tag import TagRead
+
 
 class PostBase(BaseModel):
     title: str
     content: str
-    category: Optional[str] = None
+    summary: Optional[str] = None
+
 
 class PostCreate(PostBase):
-    pass
+    tags: Optional[List[str]] = None  # 태그 이름 목록으로 전달
 
-class PostUpdate(BaseModel):  # 이 클래스가 없어서 에러 발생
+
+class PostUpdate(BaseModel):
     title: Optional[str] = None
     content: Optional[str] = None
-    category: Optional[str] = None
+    summary: Optional[str] = None
+    tags: Optional[List[str]] = None
 
-class PostResponse(PostBase):
+
+class PostRead(PostBase):
     id: int
-    author_id: int
+    author: UserRead
+    tags: Optional[List[TagRead]] = None
+    view_count: int
     created_at: datetime
     updated_at: datetime
-    
+    published_at: Optional[datetime] = None
+
     class Config:
-        from_attributes = True  # orm_mode 대신 from_attributes 사용 (Pydantic V2)
+        orm_mode = True
