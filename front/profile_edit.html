@@ -1,0 +1,34 @@
+<!-- profile_edit.html -->
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>프로필 수정</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+    <h1>프로필 수정</h1>
+
+    <div class="form-group">
+        <label for="usernameInput">Username</label>
+        <input type="text" id="usernameInput" placeholder="Username">
+    </div>
+
+    <div class="form-group">
+        <label for="emailInput">Email</label>
+        <input type="email" id="emailInput" placeholder="Email">
+    </div>
+
+    <div class="form-group">
+        <label for="bioInput">자기소개</label>
+        <textarea id="bioInput" placeholder="자기소개를 입력하세요"></textarea>
+    </div>
+
+    <div class="button-group">
+        <button id="saveBtn">프로필 변경 완료</button>
+        <button id="cancelBtn">취소</button>
+    </div>
+
+    <script src="/static/js/profile_edit.js"></script>
+</body>
+</html>

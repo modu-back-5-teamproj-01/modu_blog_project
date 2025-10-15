@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>게시글 보기</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+    <!-- 뒤로가기 -->
+    <button id="backBtn">메인으로 돌아가기</button>
+
+    <main>
+        <!-- 게시글 정보 -->
+        <section id="postSection">
+            <h1 id="postTitle"></h1>
+            <div id="postContent"></div>
+            <p id="postSummary"></p>
+            <div id="postTags"></div>
+        </section>
+
+        <hr>
+
+        <!-- 댓글 영역 -->
+        <section id="commentSection">
+            <h2>댓글</h2>
+            <ul id="commentList">
+                <!-- js/post.js에서 동적으로 댓글 및 대댓글 렌더링 -->
+            </ul>
+
+            <!-- 댓글 작성 -->
+            <div id="commentForm">
+                <textarea id="newComment" placeholder="댓글을 입력하세요..."></textarea>
+                <button id="addCommentBtn">댓글 작성</button>
+            </div>
+        </section>
+    </main>
+
+    <script src="/static/js/post.js"></script>
+</body>
+</html>
