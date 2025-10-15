@@ -33,7 +33,31 @@ blog-project/
 │   │       ├─ blog.py
 │   │       └─ comment.py
 │   └─ tests/
-├─ front/                       # 프론트엔드 파트 폴더. 하위는 아직 미구현
+├─ front/                       # 프론트엔드 파트 폴더
+│   ├─ index.html                 # 로그인 화면
+│   ├─ signup.html                # 회원가입 화면
+│   ├─ main.html                  # 블로그 메인 화면
+│   ├─ post.html                  # 게시글 화면 (상세보기)
+│   ├─ post_create.html           # 게시글 작성 화면
+│   ├─ post_edit.html             # 게시글 수정 화면
+│   ├─ profile.html               # 나의 프로필 화면
+│   ├─ profile_edit.html          # 프로필 변경 화면
+│   ├─ password_change.html       # 비밀번호 변경 화면
+│   ├─ tag_search.html            # 태그 검색 결과 화면
+│   ├─ css/
+│   │   └─ style.css              # 공용 스타일
+│   │   
+│   └─ js/
+│       ├─ auth.js                # 로그인, 회원가입, 토큰 처리
+│       ├─ main.js                # 블로그 메인 화면 관련 JS
+│       ├─ post.js                # 게시글 화면 관련 JS (댓글, 대댓글)
+│       ├─ post_create.js         # 게시글 작성 화면 JS
+│       ├─ post_edit.js           # 게시글 수정 화면 JS
+│       ├─ profile.js             # 프로필 화면 JS
+│       ├─ profile_edit.js        # 프로필 변경 화면 JS
+│       ├─ password_change.js     # 비밀번호 변경 화면 JS
+│       └─ tag_search.js          # 태그 검색 결과 화면 JS
+│
 ├─ docs/                        # 문서(md 파일 등) 저장
 ├─ static/
 │   └─ images/                  # 이미지 (문서/웹 리소스 공용)
@@ -112,3 +136,31 @@ gantt
 
 ## 📝 ERD
 ![ERD](./static/images/blog_project_diagram.png)
+
+
+```
+front/
+├─ index.html                 # 로그인 화면
+├─ signup.html                # 회원가입 화면
+├─ main.html                  # 블로그 메인 화면
+├─ post.html                  # 게시글 화면 (상세보기)
+├─ post_create.html           # 게시글 작성 화면
+├─ post_edit.html             # 게시글 수정 화면
+├─ profile.html               # 나의 프로필 화면
+├─ profile_edit.html          # 프로필 변경 화면
+├─ password_change.html       # 비밀번호 변경 화면
+├─ tag_search.html            # 태그 검색 결과 화면
+├─ css/
+│   └─ style.css              # 공용 스타일
+│   
+├─ js/
+│   ├─ auth.js                # 로그인, 회원가입, 토큰 처리
+│   ├─ main.js                # 블로그 메인 화면 관련 JS
+│   ├─ post.js                # 게시글 화면 관련 JS (댓글, 대댓글)
+│   ├─ post_create.js         # 게시글 작성 화면 JS
+│   ├─ post_edit.js           # 게시글 수정 화면 JS
+│   ├─ profile.js             # 프로필 화면 JS
+│   ├─ profile_edit.js        # 프로필 변경 화면 JS
+│   ├─ password_change.js     # 비밀번호 변경 화면 JS
+│   └─ tag_search.js          # 태그 검색 결과 화면 JS
+```

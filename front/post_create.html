@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>게시글 작성</title>
+  <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+  <header>
+    <h1>게시글 작성</h1>
+  </header>
+
+  <main>
+    <!-- 제목 입력 -->
+    <div class="form-group">
+      <label for="titleInput">제목</label>
+      <input type="text" id="titleInput" placeholder="게시글 제목을 입력하세요" required>
+    </div>
+
+    <!-- 내용 입력 -->
+    <div class="form-group">
+      <label for="contentInput">내용</label>
+      <textarea id="contentInput" rows="10" placeholder="게시글 내용을 입력하세요" required></textarea>
+    </div>
+
+    <!-- 요약 입력 -->
+    <div class="form-group">
+      <label for="summaryInput">요약 (선택)</label>
+      <input type="text" id="summaryInput" placeholder="간단한 요약을 입력하세요 (선택)">
+    </div>
+
+    <!-- 태그 입력 -->
+    <div class="form-group">
+      <label for="tagInput">태그 (선택)</label>
+      <div class="tag-input-container">
+        <input type="text" id="tagInput" placeholder="태그를 입력하고 '추가' 버튼 클릭">
+        <button id="addTagBtn" type="button">태그 추가 완료</button>
+      </div>
+      <div id="tagContainer" class="tag-container">
+        <!-- js에서 태그 배지 생성 -->
+      </div>
+    </div>
+
+    <!-- 버튼 영역 -->
+    <div class="button-group">
+      <button id="submitBtn" type="button">게시글 작성 완료</button>
+      <button id="cancelBtn" type="button">작성 취소</button>
+    </div>
+  </main>
+
+  <script src="/static/js/post_create.js"></script>
+</body>
+</html>
